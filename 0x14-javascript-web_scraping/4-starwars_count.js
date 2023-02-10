@@ -1,21 +1,22 @@
 #!/usr/bin/node
-// A script that prints the number of movies where the Wedge  is present.
 
 const request = require('request');
-
-let count = 0;
 const url = process.argv[2];
-request.get(url, function (error, response, body) {
-  if (!error) {
+const characterId = '18';
+let count = 0;
+
+request.get(url, (error, response, body) => {
+  if (error) {
+    console.log(error);
+  } else {
     const data = JSON.parse(body);
-    const movies = data.results;
-    for (const movie of movies) {
-      for (const character of movie.characters) {
-        if (character.substr(-3) === '18/') {
+    data.results.forEach((film) => {
+      film.characters.forEach((character) => {
+        if (character.includes(characterId)) {
           count += 1;
         }
-      }
-    }
+      });
+    });
     console.log(count);
   }
 }); 
